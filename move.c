@@ -1,30 +1,4 @@
-#include <stdio.h>
-#include <string.h>
-#define MAX_ANIMALS 8
-#define ON_BOARD 0
-#define MY_HAND 1
-#define ENEMY_HAND 2
-#define MAX_MOVE 50
-#define PLACE 5
-#define OUT_OF_BOARD '\0'
-
-
-typedef struct{
-	int x, y;
-	char type;
-} Animal;
-typedef struct{
-	Animal animal[MAX_ANIMALS];
-	int num;
-} Group;
-typedef struct{
-	char type;
-	int prevX,prevY,dirc;
-} Move;
-typedef struct{
-	Move list[MAX_MOVE];
-	int num;
-} Movelist;
+#include "move.h"
 
 Animal newAnimal(char type, int x, int y){
 	Animal anim;
@@ -205,26 +179,4 @@ void printMove(Move move){
 			y = moveY(move.prevY,move.dirc);
 		printf("%c %c%d %c%d\n", move.type, 'A'+move.prevX, move.prevY+1, 'A'+x, y+1);
 	}
-}
-
-int main(){
-	Group onBoard, myHand, enemyHand;
-	Movelist movelist;
-	movelist.num = 0;
-	int i,a,b;
-	inputBoard(&onBoard, &myHand, &enemyHand);
-	for(i=0;i<onBoard.num;i++){
-		animalMove(onBoard.animal[i],onBoard,&movelist);
-	}
-	for(a=0;a<3;a++){
-		for(b=0;b<4;b++){
-			for(i=0;i<myHand.num;i++){
-				addMove(myHand.animal[i].type,a,b,PLACE,onBoard,&movelist);
-			}
-		}
-	}
-	for(i=0;i<movelist.num;i++){
-		printMove(movelist.list[i]);
-	}
-	return 0;
 }
