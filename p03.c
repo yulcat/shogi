@@ -39,6 +39,7 @@ Move newMove(char type, int prevX, int prevY, int dirc){
 	move.prevX = prevX;
 	move.prevY = prevY;
 	move.dirc = dirc;
+	return move;
 }
 void inputBoard(Group* onBoard, Group* myHand, Group* enemyHand){
 	int i,j;
@@ -56,33 +57,32 @@ void inputBoard(Group* onBoard, Group* myHand, Group* enemyHand){
         }
     }
 	fgets(buff,MAX_ANIMALS,stdin);
-	for(i=0;buff[i]!=\n;i++){
+	for(i=0;buff[i]!='\n';i++){
 		myHand->animal[myHand->num] = newAnimal(buff[i],0,0);
 		myHand->num++;
 	}
     fgets(buff,MAX_ANIMALS,stdin);
-	for(i=0;buff[i]!=\n;i++){
+	for(i=0;buff[i]!='\n';i++){
 		enemyHand->animal[enemyHand->num] = newAnimal(buff[i],0,0);
 		enemyHand->num++;
 	}
-}
-
-char getTile(int x, int y, Group group){
-	if(!isInBoard(x,y))
-		return OUT_OF_BOARD;
-	int i;
-	for(i=0;i<group.num;i++){
-		if(x==group.animal[i].x 
-			&& y==group.animal[i].y)
-			return group.animal[i];
-	}
-	return 'o';
 }
 int isInBoard(int x, int y){
 	if(x>2 || x<0 || y>3 || y<0)
 		return 0;
 	else
 		return 1;
+}
+char getTile(int x, int y, Group group){
+	if(isInBoard(x,y)==0)
+		return OUT_OF_BOARD;
+	int i;
+	for(i=0;i<group.num;i++){
+		if(x==group.animal[i].x 
+			&& y==group.animal[i].y)
+			return group.animal[i].type;
+	}
+	return 'o';
 }
 
 int moveX(int x, int dirc){
@@ -131,13 +131,13 @@ int testDirc(int x, int y, int dirc, Group onBoard){
 void addMove(char type, int x, int y, int dirc, Group onBoard, Movelist* list){
 	if(dirc==PLACE){
 		if(getTile(x,y,onBoard)=='o'){
-			list->move[list->num] = newMove(type,x,y,PLACE);
+			list->list[list->num] = newMove(type,x,y,PLACE);
 			list->num++;
 		}else
 			return;
 	}else{
 		if(testDirc(x,y,dirc,onBoard)){
-			list->move[list->num] = newMove(type,x,y,dirc);
+			list->list[list->num] = newMove(type,x,y,dirc);
 			list->num++;
 		}else
 			return;
@@ -212,7 +212,7 @@ int main(){
 	Movelist movelist;
 	movelist.num = 0;
 	int i,a,b;
-	inputBoard();
+	inputBoard(&onBoard, &myHand, &enemyHand);
 	for(i=0;i<onBoard.num;i++){
 		animalMove(onBoard.animal[i],onBoard,&movelist);
 	}
@@ -224,7 +224,7 @@ int main(){
 		}
 	}
 	for(i=0;i<movelist.num;i++){
-		printMove(movelist.move[i]);
+		printMove(movelist.list[i]);
 	}
 	return 0;
 }
