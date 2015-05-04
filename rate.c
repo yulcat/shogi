@@ -8,7 +8,7 @@ int rate(Group animalsOnBoard, Move move){
 	}
 	for(x=0; x<3; x++){
 		for(y=0; y<4; y++){
-			getScore(board.tile[x][y]);
+			score += getScore(board.tile[x][y]);
 		}
 	}
 	return 0;
