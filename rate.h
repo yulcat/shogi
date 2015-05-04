@@ -18,5 +18,9 @@ typedef struct{
 int rate(Group onBoard, Move move);
 Group moveGroup(Group group, int prevX, int prevY, int x, int y);
 Board makeBoard(Group* group, Move move);
-void applyReach(Animal animal, Board board);
+void applyReach(Animal animal, Board* board);
 int getScore(Tile tile);
+void applyEnemy(char type, int prevX, int prevY, int dirc, Board* board);
+void applyMy(char type, int prevX, int prevY, int dirc, Board* board);
+void applyReach(Animal anim, Board* board);
+int typeToScore(char type);
