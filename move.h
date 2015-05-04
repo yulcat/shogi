@@ -43,3 +43,4 @@ void moveLion(int x, int y, Group onBoard, Movelist* list);
 void moveElephant(int x, int y, Group onBoard, Movelist* list);
 void animalMove(Animal anim, Group onBoard, Movelist* list);
 void printMove(Move move);
+Movelist getMovelist(Group onBoard, Group myHand);

@@ -180,3 +180,19 @@ void printMove(Move move){
 		printf("%c %c%d %c%d\n", move.type, 'A'+move.prevX, move.prevY+1, 'A'+x, y+1);
 	}
 }
+Movelist getMovelist(Group onBoard, Group myHand){
+	Movelist movelist;
+	movelist.num = 0;
+	int i,a,b;
+	for(i=0;i<onBoard.num;i++){
+			animalMove(onBoard.animal[i],onBoard,&movelist);
+	}
+	for(a=0;a<3;a++){
+			for(b=0;b<4;b++){
+					for(i=0;i<myHand.num;i++){
+							addMove(myHand.animal[i].type,a,b,PLACE,onBoard,&movelist);
+					}
+			}
+	}
+	return movelist;
+}
