@@ -9,6 +9,7 @@ int main(){
 	for(i=0;i<movelist.num;i++){
 		printMove(movelist.list[i]);
 		int score = rate(onBoard, movelist.list[i]);
+		printf("%d\n",score);
 		if(score>maxScore){
 			maxId = i;
 			maxScore = score;

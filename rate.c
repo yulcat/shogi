@@ -2,15 +2,17 @@
 
 int rate(Group animalsOnBoard, Move move){
 	Board board = makeBoard(&animalsOnBoard,move);
-	int i, x, y, score=0;
+	int i, x, y;
 	for(i=0; i<animalsOnBoard.num; i++){
 		applyReach(animalsOnBoard.animal[i], &board);
 	}
-	for(x=0; x<3; x++){
-		for(y=0; y<4; y++){
-			score += getScore(board.tile[x][y]);
-		}
-	}
+//	for(y=0;y<4;y++){
+//		for(x=0;x<3;x++){
+//			printf("%d",board.tile[x][y].myNum);
+//		}
+//		printf("\n");
+//	}
+	int score = getScore(board);
 	return score;
 }
 Group moveGroup(Group group, int prevX, int prevY, int x, int y){
@@ -61,19 +63,35 @@ Board makeBoard(Group* group, Move move){
 	}
 	return board;
 }
-int getScore(Tile tile){
-	int i, score=0;
-	score += typeToScore(tile.occupied);
-	for(i=0; i<tile.enemyNum; i++){
-		score -= typeToScore(tile.occupied);
-		tile.occupied = tile.enemyReach[i];
-		if(i<tile.myNum){
-			score -= typeToScore(tile.occupied);
-			tile.occupied = tile.myReach[i];
-		}else{
-			break;
+int getScore(Board board){
+	int maxDanger=0, maxX=0, maxY=0, x, y, score=0;
+	for(x=0; x<3; x++){
+		for(y=0; y<4; y++){
+			char target = board.tile[x][y].occupied;
+			int targetScore = typeToScore(target);
+			score += targetScore;
+			if(targetScore > maxDanger
+				&& board.tile[x][y].enemyNum > 0)
+			{
+				maxDanger = targetScore;
+				maxX = x; maxY = y;
+			}
 		}
 	}
+	printf("sum : %d\n", score);
+	score -= maxDanger;
+	Tile tile = board.tile[maxX][maxY];
+	int minBenefit=0, i;
+	if(tile.myNum > 0 && maxDanger > 0){
+		minBenefit = typeToScore(tile.enemyReach[0]);
+		for(i=1; i<tile.enemyNum; i++){
+			if(typeToScore(tile.enemyReach[i]) > minBenefit){
+				minBenefit = typeToScore(tile.enemyReach[i]);
+			}
+		}
+		score -= minBenefit;
+	}
+	printf("danger : %d\nbenefit : %d\n",maxDanger,minBenefit);
 	return score;
 }
 void applyEnemy(char type, int prevX, int prevY, int dirc, Board* board){
@@ -89,7 +107,7 @@ void applyMy(char type, int prevX, int prevY, int dirc, Board* board){
 		y = moveY(prevY,dirc);
 	if(isInBoard(x,y)==0)
 		return;
-	board->tile[x][y].myReach[board->tile[x][y].enemyNum] = type;
+	board->tile[x][y].myReach[board->tile[x][y].myNum] = type;
 	board->tile[x][y].myNum++;
 }
 void applyReach(Animal anim, Board* board){
@@ -103,18 +121,22 @@ void applyReach(Animal anim, Board* board){
 		applyMy('L', anim.x, anim.y, 7, board);
 		applyMy('L', anim.x, anim.y, 8, board);
 		applyMy('L', anim.x, anim.y, 9, board);
+		return;
 	case 'G':
 		applyMy('G', anim.x, anim.y, 2, board);
 		applyMy('G', anim.x, anim.y, 4, board);
 		applyMy('G', anim.x, anim.y, 6, board);
 		applyMy('G', anim.x, anim.y, 8, board);
+		return;
 	case 'E':
 		applyMy('E', anim.x, anim.y, 1, board);
 		applyMy('E', anim.x, anim.y, 3, board);
 		applyMy('E', anim.x, anim.y, 7, board);
 		applyMy('E', anim.x, anim.y, 9, board);
+		return;
 	case 'C':
 		applyMy('C', anim.x, anim.y, 8, board);
+		return;
 	case 'H':
 		applyMy('H', anim.x, anim.y, 2, board);
 		applyMy('H', anim.x, anim.y, 4, board);
@@ -122,6 +144,7 @@ void applyReach(Animal anim, Board* board){
 		applyMy('H', anim.x, anim.y, 7, board);
 		applyMy('H', anim.x, anim.y, 8, board);
 		applyMy('H', anim.x, anim.y, 9, board);
+		return;
 	case 'l':
 		applyEnemy('l', anim.x, anim.y, 1, board);
 		applyEnemy('l', anim.x, anim.y, 2, board);
@@ -131,18 +154,22 @@ void applyReach(Animal anim, Board* board){
 		applyEnemy('l', anim.x, anim.y, 7, board);
 		applyEnemy('l', anim.x, anim.y, 8, board);
 		applyEnemy('l', anim.x, anim.y, 9, board);
+		return;
 	case 'g':
 		applyEnemy('g', anim.x, anim.y, 2, board);
 		applyEnemy('g', anim.x, anim.y, 4, board);
 		applyEnemy('g', anim.x, anim.y, 6, board);
 		applyEnemy('g', anim.x, anim.y, 8, board);
+		return;
 	case 'e':
 		applyEnemy('e', anim.x, anim.y, 1, board);
 		applyEnemy('e', anim.x, anim.y, 3, board);
 		applyEnemy('e', anim.x, anim.y, 7, board);
 		applyEnemy('e', anim.x, anim.y, 9, board);
+		return;
 	case 'c':
 		applyEnemy('c', anim.x, anim.y, 2, board);
+		return;
 	case 'h':
 		applyEnemy('h', anim.x, anim.y, 1, board);
 		applyEnemy('h', anim.x, anim.y, 2, board);
@@ -150,6 +177,7 @@ void applyReach(Animal anim, Board* board){
 		applyEnemy('h', anim.x, anim.y, 4, board);
 		applyEnemy('h', anim.x, anim.y, 6, board);
 		applyEnemy('h', anim.x, anim.y, 8, board);
+		return;
 	default:
 		return;
 	}
@@ -157,7 +185,7 @@ void applyReach(Animal anim, Board* board){
 int typeToScore(char type){
 	switch(type){
 	case 'L':
-		return 10000;
+		return 20000;
 	case 'G':
 		return 100;
 	case 'E':
