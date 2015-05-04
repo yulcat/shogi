@@ -21,6 +21,7 @@ Board makeBoard(Group* group, Move move);
 void applyReach(Animal animal, Board* board);
 int getMinBenefit(Tile tile);
 int getScore(Board board);
+int placePenalty(Move move);
 void applyEnemy(char type, int prevX, int prevY, int dirc, Board* board);
 void applyMy(char type, int prevX, int prevY, int dirc, Board* board);
 void applyReach(Animal anim, Board* board);

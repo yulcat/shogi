@@ -6,7 +6,7 @@ int rate(Group animalsOnBoard, Move move){
 	for(i=0; i<animalsOnBoard.num; i++){
 		applyReach(animalsOnBoard.animal[i], &board);
 	}
-	int score = getScore(board);
+	int score = getScore(board) - placePenalty(move);
 	return score;
 }
 Group moveGroup(Group group, int prevX, int prevY, int x, int y){
@@ -57,9 +57,6 @@ Board makeBoard(Group* group, Move move){
 	}
 	return board;
 }
-void printBoard(Board board){
-	
-}
 int getMinBenefit(Tile tile){
 	if(tile.myNum == 0 || tile.enemyNum == 0)
 		return 0;
@@ -104,10 +101,32 @@ int getScore(Board board){
 		}
 		Tile tile = board.tile[maxX][maxY];
 		maxDanger += getMinBenefit(tile);
-		printf("benefit : %d\n",maxDanger);
 	}
+	printf("benefit : %d\n",maxDanger);
 	score -= maxDanger;
+	if(maxDanger == 0)
+		score++;
 	return score;
+}
+int placePenalty(Move move){
+	if(move.dirc == PLACE)
+		return typeToScore(move.type);
+	else
+		return 0;
+}
+int effectRange(Board board){
+	int x,y,i,effect = 0;
+	for(x=0;x<3;x++){
+		for(y=0;y<4;y++){
+			Tile tile = board.tile[x][y];
+			for(i=0;i<tile.myNum;i++){
+				if(myReach[i]=='L')
+					continue;
+				effect++;
+			}
+		}
+	}
+	return effect;
 }
 void applyEnemy(char type, int prevX, int prevY, int dirc, Board* board){
 	int x = moveX(prevX,dirc),
