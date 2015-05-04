@@ -120,7 +120,7 @@ int effectRange(Board board){
 		for(y=0;y<4;y++){
 			Tile tile = board.tile[x][y];
 			for(i=0;i<tile.myNum;i++){
-				if(myReach[i]=='L')
+				if(tile.myReach[i]=='L')
 					continue;
 				effect++;
 			}
