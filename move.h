@@ -7,6 +7,7 @@
 #define MAX_MOVE 50
 #define PLACE 5
 #define OUT_OF_BOARD '\0'
+#define MOVE
 
 typedef struct{
 	int x, y;

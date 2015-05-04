@@ -1,4 +1,6 @@
+#ifndef MOVE
 #include "move.h"
+#endif
 
 typedef struct{
 	int x,y;
