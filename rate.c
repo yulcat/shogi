@@ -6,7 +6,7 @@ int rate(Group animalsOnBoard, Move move){
 	for(i=0; i<animalsOnBoard.num; i++){
 		applyReach(animalsOnBoard.animal[i], &board);
 	}
-	int score = getScore(board) - placePenalty(move);
+	int score = getScore(board) - placePenalty(move) + effectRange(board);
 	return score;
 }
 Group moveGroup(Group group, int prevX, int prevY, int x, int y){
@@ -104,8 +104,6 @@ int getScore(Board board){
 	}
 	printf("benefit : %d\n",maxDanger);
 	score -= maxDanger;
-	if(maxDanger == 0)
-		score++;
 	return score;
 }
 int placePenalty(Move move){
