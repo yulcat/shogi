@@ -2,7 +2,7 @@
 
 int rate(Group animalsOnBoard, Move move){
 	Board board = makeBoard(&animalsOnBoard,move);
-	int i, x, y, score;
+	int i, x, y, score=0;
 	for(i=0; i<animalsOnBoard.num; i++){
 		applyReach(animalsOnBoard.animal[i], &board);
 	}
@@ -11,7 +11,7 @@ int rate(Group animalsOnBoard, Move move){
 			score += getScore(board.tile[x][y]);
 		}
 	}
-	return 0;
+	return score;
 }
 Group moveGroup(Group group, int prevX, int prevY, int x, int y){
 	if(isInBoard(x,y)==0)
