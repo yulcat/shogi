@@ -6,12 +6,6 @@ int rate(Group animalsOnBoard, Move move){
 	for(i=0; i<animalsOnBoard.num; i++){
 		applyReach(animalsOnBoard.animal[i], &board);
 	}
-//	for(y=0;y<4;y++){
-//		for(x=0;x<3;x++){
-//			printf("%d",board.tile[x][y].myNum);
-//		}
-//		printf("\n");
-//	}
 	int score = getScore(board);
 	return score;
 }
@@ -63,35 +57,56 @@ Board makeBoard(Group* group, Move move){
 	}
 	return board;
 }
+void printBoard(Board board){
+	
+}
+int getMinBenefit(Tile tile){
+	if(tile.myNum == 0 || tile.enemyNum == 0)
+		return 0;
+	int i=0, minBenefit = typeToScore(tile.enemyReach[0]);
+	for(i=1; i<tile.enemyNum; i++){
+		int benefit = typeToScore(tile.enemyReach[i]);
+		if(minBenefit < benefit){
+			minBenefit = benefit;
+		}
+	}
+	return minBenefit;
+}
 int getScore(Board board){
 	int maxDanger=0, maxX=0, maxY=0, x, y, score=0;
 	for(x=0; x<3; x++){
 		for(y=0; y<4; y++){
-			char target = board.tile[x][y].occupied;
+			Tile tile = board.tile[x][y];
+			char target = tile.occupied;
 			int targetScore = typeToScore(target);
 			score += targetScore;
 			if(targetScore > maxDanger
-				&& board.tile[x][y].enemyNum > 0)
+				&& tile.enemyNum > 0
+				&& targetScore + getMinBenefit(tile) > 0)
 			{
 				maxDanger = targetScore;
 				maxX = x; maxY = y;
 			}
 		}
 	}
-	printf("sum : %d\n", score);
-	score -= maxDanger;
-	Tile tile = board.tile[maxX][maxY];
-	int minBenefit=0, i;
-	if(tile.myNum > 0 && maxDanger > 0){
-		minBenefit = typeToScore(tile.enemyReach[0]);
-		for(i=1; i<tile.enemyNum; i++){
-			if(typeToScore(tile.enemyReach[i]) > minBenefit){
-				minBenefit = typeToScore(tile.enemyReach[i]);
+	printf("sum : %d\ndanger : %d\n", score, maxDanger);
+	if(maxDanger == 0){
+		for(x=0; x<3; x++){
+			for(y=0; y<4; y++){
+				int targetScore = typeToScore(board.tile[x][y].occupied);
+				if(targetScore > maxDanger
+					&& board.tile[x][y].enemyNum > 0)
+				{
+					maxDanger = targetScore;
+					maxX = x; maxY = y;
+				}
 			}
 		}
-		score -= minBenefit;
+		Tile tile = board.tile[maxX][maxY];
+		maxDanger += getMinBenefit(tile);
+		printf("benefit : %d\n",maxDanger);
 	}
-	printf("danger : %d\nbenefit : %d\n",maxDanger,minBenefit);
+	score -= maxDanger;
 	return score;
 }
 void applyEnemy(char type, int prevX, int prevY, int dirc, Board* board){

@@ -19,6 +19,7 @@ int rate(Group onBoard, Move move);
 Group moveGroup(Group group, int prevX, int prevY, int x, int y);
 Board makeBoard(Group* group, Move move);
 void applyReach(Animal animal, Board* board);
+int getMinBenefit(Tile tile);
 int getScore(Board board);
 void applyEnemy(char type, int prevX, int prevY, int dirc, Board* board);
 void applyMy(char type, int prevX, int prevY, int dirc, Board* board);
