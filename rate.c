@@ -8,8 +8,8 @@ int rate(Group animalsOnBoard, Move move){ // Score a Move
 		applyReach(animalsOnBoard.animal[i], &board);
 		// apply list of animals that can reach the tile
 	}
-	int score = getScore(board) - placePenalty(move) + effectRange(board) + catchLion(board);
-	// Score is board score + place penalty + moveable range
+	int score = getScore(board) - placePenalty(move) + effectRange(board) + catchLion(board) + touchDown(board);
+	// Score is board score + place penalty + moveable range + did we catched lion? + did lion get touchdown?
 	return score;
 }
 
@@ -65,7 +65,7 @@ Board makeBoard(Group* group, Move move){ // Make Board from Group and Move
 	return board;
 }
 int catchLion(Board board){ // If catched lion, plus 100000 points
-	int x,y,lion=0;
+	int x,y;
 	for(x=0; x<3; x++){
 		for(y=0; y<4; y++){
 			if(board.tile[x][y].occupied == 'l')
@@ -73,6 +73,22 @@ int catchLion(Board board){ // If catched lion, plus 100000 points
 		}
 	}
 	return 100000;
+}
+int touchDown(Board board){ // did my/enemy lion get touchdown?
+	int x,i;
+	for(x=0; x<3; x++){
+		Tile tile = board.tile[x][0];
+		if(tile.occupied == 'L' && tile.enemyNum == 0)
+			return 10000;
+		// If my lion got touchdown, give additional points
+		
+		tile = board.tile[x][3];
+		for(i=0; i<tile.enemyNum; i++){
+			if(tile.enemyReach[i] == 'l' && tile.myNum == 0)
+				return -10000;
+			// If enemy lion can get touchdown, give penalty points
+		}
+	}
 }
 int getDanger(Tile tile){
 	char target = tile.occupied;
