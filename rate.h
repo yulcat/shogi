@@ -10,10 +10,11 @@ typedef struct{
 	char myReach[8];
 	int myNum;
 } Tile;
-
+// Each tiles has list of animals, that can move to the tile.
 typedef struct{
 	Tile tile[3][4];
 } Board;
+// Array of tiles. fixed size.
 
 int rate(Group onBoard, Move move);
 Group moveGroup(Group group, int prevX, int prevY, int x, int y);

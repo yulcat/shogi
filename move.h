@@ -1,9 +1,6 @@
 #include <stdio.h>
 #define MOVE
 #define MAX_ANIMALS 8
-#define ON_BOARD 0
-#define MY_HAND 1
-#define ENEMY_HAND 2
 #define MAX_MOVE 50
 #define PLACE 5
 #define OUT_OF_BOARD '\0'
@@ -12,18 +9,22 @@ typedef struct{
 	int x, y;
 	char type;
 } Animal;
+// Struct of Animal pieces.
 typedef struct{
 	Animal animal[MAX_ANIMALS];
 	int num;
 } Group;
+// List of Animal pieces, with size.
 typedef struct{
 	char type;
 	int prevX,prevY,dirc;
 } Move;
+// Possible Move
 typedef struct{
 	Move list[MAX_MOVE];
 	int num;
 } Movelist;
+// List of Possible Moves, with size.
 
 Animal newAnimal(char type, int x, int y);
 Move newMove(char type, int prevX, int prevY, int dirc);

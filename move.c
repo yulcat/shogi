@@ -1,13 +1,13 @@
 #include "move.h"
 
-Animal newAnimal(char type, int x, int y){
+Animal newAnimal(char type, int x, int y){ // Makes new Animal
 	Animal anim;
 	anim.x = x;
 	anim.y = y;
 	anim.type = type;
 	return anim;
 }
-Move newMove(char type, int prevX, int prevY, int dirc){
+Move newMove(char type, int prevX, int prevY, int dirc){ // Makes new Move
 	Move move;
 	move.type = type;
 	move.prevX = prevX;
@@ -15,7 +15,7 @@ Move newMove(char type, int prevX, int prevY, int dirc){
 	move.dirc = dirc;
 	return move;
 }
-void inputBoard(Group* onBoard, Group* myHand, Group* enemyHand){
+void inputBoard(Group* onBoard, Group* myHand, Group* enemyHand){ // Takes stdin to build Groups
 	int i,j;
 	char buff[MAX_ANIMALS];
 	onBoard->num = 0;
@@ -41,13 +41,13 @@ void inputBoard(Group* onBoard, Group* myHand, Group* enemyHand){
 		enemyHand->num++;
 	}
 }
-int isInBoard(int x, int y){
+int isInBoard(int x, int y){ // Is it in the board?
 	if(x>2 || x<0 || y>3 || y<0)
 		return 0;
 	else
 		return 1;
 }
-char getTile(int x, int y, Group group){
+char getTile(int x, int y, Group group){ // What is in (x,y)?
 	if(isInBoard(x,y)==0)
 		return OUT_OF_BOARD;
 	int i;
@@ -59,14 +59,14 @@ char getTile(int x, int y, Group group){
 	return 'o';
 }
 
-int moveX(int x, int dirc){
+int moveX(int x, int dirc){ // Move x to direction
 	if(dirc%3 == 1)
 		return x-1;
 	else if(dirc%3 == 0)
 		return x+1;
 	else return x;
 }
-int moveY(int y, int dirc){
+int moveY(int y, int dirc){ // Move y to direction
 	dirc--;
 	if(dirc/3 == 2)
 		return y-1;
@@ -75,7 +75,7 @@ int moveY(int y, int dirc){
 	else
 		return y+1;
 }
-int isMine(char target){
+int isMine(char target){ // Is it mine?
 	if(target == 'L'
 		|| target == 'G'
 		|| target == 'C'
@@ -84,7 +84,7 @@ int isMine(char target){
 		return 1;
 	else return 0;
 }
-int isEnemy(char target){
+int isEnemy(char target){ // Is it enemy?
 	if(target == 'l'
 		|| target == 'g'
 		|| target == 'c'
@@ -93,7 +93,7 @@ int isEnemy(char target){
 		return 1;
 	else return 0;
 }
-int testDirc(int x, int y, int dirc, Group onBoard){
+int testDirc(int x, int y, int dirc, Group onBoard){ // Can it move to the direction?
 	x = moveX(x,dirc);
 	y = moveY(y,dirc);
 	char target = getTile(x,y,onBoard);
@@ -102,7 +102,7 @@ int testDirc(int x, int y, int dirc, Group onBoard){
 	else
 		return 0;
 }
-void addMove(char type, int x, int y, int dirc, Group onBoard, Movelist* list){
+void addMove(char type, int x, int y, int dirc, Group onBoard, Movelist* list){ // Add Move to Movelist when it can
 	if(dirc==PLACE){
 		if(getTile(x,y,onBoard)=='o'){
 			list->list[list->num] = newMove(type,x,y,PLACE);
@@ -150,7 +150,7 @@ void moveElephant(int x, int y, Group onBoard, Movelist* list){
 	addMove('E',x,y,7,onBoard,list);
 	addMove('E',x,y,9,onBoard,list);
 }
-void animalMove(Animal anim, Group onBoard, Movelist* list){
+void animalMove(Animal anim, Group onBoard, Movelist* list){ // add Move by Animal.type
 	switch(anim.type){
 	case 'G':
 		moveGiraffe(anim.x,anim.y,onBoard,list);
@@ -171,7 +171,7 @@ void animalMove(Animal anim, Group onBoard, Movelist* list){
 		return;
 	}
 }
-void printMove(Move move){
+void printMove(Move move){ // Print Move
 	if(move.dirc == PLACE)
 		printf("%c %c %c%d\n", move.type, 'P', 'A'+move.prevX, move.prevY+1);
 	else{
@@ -180,7 +180,7 @@ void printMove(Move move){
 		printf("%c %c%d %c%d\n", move.type, 'A'+move.prevX, move.prevY+1, 'A'+x, y+1);
 	}
 }
-Movelist getMovelist(Group onBoard, Group myHand){
+Movelist getMovelist(Group onBoard, Group myHand){ // Get all the moves
 	Movelist movelist;
 	movelist.num = 0;
 	int i,a,b;

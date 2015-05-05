@@ -1,15 +1,19 @@
 #include "rate.h"
 
-int rate(Group animalsOnBoard, Move move){
+int rate(Group animalsOnBoard, Move move){ // Score a Move
 	Board board = makeBoard(&animalsOnBoard,move);
+	// Get Tile info from Group and Move
 	int i, x, y;
 	for(i=0; i<animalsOnBoard.num; i++){
 		applyReach(animalsOnBoard.animal[i], &board);
+		// apply list of animals that can reach the tile
 	}
 	int score = getScore(board) - placePenalty(move) + effectRange(board);
+	// Score is board score + place penalty + moveable range
 	return score;
 }
-Group moveGroup(Group group, int prevX, int prevY, int x, int y){
+
+Group moveGroup(Group group, int prevX, int prevY, int x, int y){ // apply Move to Group
 	if(isInBoard(x,y)==0)
 		return group;
 	int i;
@@ -32,7 +36,7 @@ Group moveGroup(Group group, int prevX, int prevY, int x, int y){
 	}
 	return newGroup;
 }
-Board makeBoard(Group* group, Move move){
+Board makeBoard(Group* group, Move move){ // Make Board from Group and Move
 	Board board;
 	int x,y;
 	for(x=0;x<3;x++){
@@ -42,18 +46,21 @@ Board makeBoard(Group* group, Move move){
 			board.tile[x][y].occupied = getTile(x,y,*group);
 			board.tile[x][y].enemyNum = 0;
 			board.tile[x][y].myNum = 0;
+			// Initialize Board with Group info
 		}
 	}
 	if(move.dirc==PLACE){
 		board.tile[move.prevX][move.prevY].occupied = move.type;
 		group->animal[group->num] = newAnimal(move.type, move.prevX, move.prevY);
 		group->num++;
+		// Apply Placement
 	}else{
 		x = moveX(move.prevX,move.dirc);
 		y = moveY(move.prevY,move.dirc);
 		*group = moveGroup(*group, move.prevX, move.prevY, x, y);
 		board.tile[move.prevX][move.prevY].occupied = 'o';
 		board.tile[x][y].occupied = move.type;
+		// Apply Movement
 	}
 	return board;
 }
@@ -106,19 +113,21 @@ int getScore(Board board){
 	score -= maxDanger;
 	return score;
 }
-int placePenalty(Move move){
+int placePenalty(Move move){ // Placement gives false additional score from number of pieces,
+							 // So remove the additional score for fair evaluation.
 	if(move.dirc == PLACE)
 		return typeToScore(move.type);
 	else
 		return 0;
 }
-int effectRange(Board board){
+int effectRange(Board board){ // Getting various moves is strategic benefit.
+							  // Give additional score for each possible moves.
 	int x,y,i,effect = 0;
 	for(x=0;x<3;x++){
 		for(y=0;y<4;y++){
 			Tile tile = board.tile[x][y];
 			for(i=0;i<tile.myNum;i++){
-				if(tile.myReach[i]=='L')
+				if(tile.myReach[i]=='L' || isMine(tile.occupied))
 					continue;
 				effect++;
 			}
