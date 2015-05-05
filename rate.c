@@ -64,53 +64,64 @@ Board makeBoard(Group* group, Move move){ // Make Board from Group and Move
 	}
 	return board;
 }
-int getMinBenefit(Tile tile){
-	if(tile.myNum == 0 || tile.enemyNum == 0)
+int getDanger(Tile tile){
+	char target = tile.occupied;
+	if(isMine(target)==0 || tile.enemyNum == 0)
 		return 0;
-	int i=0, minBenefit = typeToScore(tile.enemyReach[0]);
-	for(i=1; i<tile.enemyNum; i++){
-		int benefit = typeToScore(tile.enemyReach[i]);
-		if(minBenefit < benefit){
-			minBenefit = benefit;
-		}
+		// If target is not mine, or there is no enemy nearby, Danger is 0.
+	int myLoss = typeToScore(tile.occupied);
+	if(tile.enemyNum > tile.myNum)
+		return myLoss;
+		// If enemy is outnumbered, count it loss.
+	int i, minEnemyLoss = typeToScore(tile.enemyReach[0]);
+	for(i=0; i<tile.enemyNum; i++){
+		int enemyLoss = typeToScore(tile.enemyReach[i]);
+		if(minEnemyLoss < enemyLoss)
+			minEnemyLoss = enemyLoss;
 	}
-	return minBenefit;
+	return myLoss + minEnemyLoss;
+	// If we can retake the tile, calculate profit and loss.
+}
+int getProfit(Tile tile){
+	char target = tile.occupied;
+	if(isEnemy(target)==0 || tile.myNum == 0)
+		return 0;
+		// If target is not enemy, or there is no mine nearby, Profit is 0.
+	int enemyLoss = typeToScore(tile.occupied);
+	if(tile.myNum > tile.enemyNum)
+		return enemyLoss;
+		// If mine is outnumbered, count it profit.
+	int i, minMyLoss = typeToScore(tile.myReach[0]);
+	for(i=0; i<tile.enemyNum; i++){
+		int myLoss = typeToScore(tile.myReach[i]);
+		if(minMyLoss > myLoss)
+			minMyLoss = myLoss;
+	}
+	return enemyLoss + minMyLoss;
+	// If enemy can retake the tile, calculate profit and loss.
 }
 int getScore(Board board){
-	int maxDanger=0, maxX=0, maxY=0, x, y, score=0;
+	int maxDanger=0, profits=0, x, y, score=0;
 	for(x=0; x<3; x++){
 		for(y=0; y<4; y++){
 			Tile tile = board.tile[x][y];
 			char target = tile.occupied;
 			int targetScore = typeToScore(target);
+			int danger = getDanger(tile);
 			score += targetScore;
-			if(targetScore > maxDanger
-				&& tile.enemyNum > 0
-				&& targetScore + getMinBenefit(tile) > 0)
-			{
-				maxDanger = targetScore;
-				maxX = x; maxY = y;
-			}
+			if(danger > maxDanger)
+				maxDanger = danger;
+			int profit = getProfit(tile);
+			if(profit<0)
+				profits += getProfit(tile);
 		}
 	}
 	printf("sum : %d\ndanger : %d\n", score, maxDanger);
-	if(maxDanger == 0){
-		for(x=0; x<3; x++){
-			for(y=0; y<4; y++){
-				int targetScore = typeToScore(board.tile[x][y].occupied);
-				if(targetScore > maxDanger
-					&& board.tile[x][y].enemyNum > 0)
-				{
-					maxDanger = targetScore;
-					maxX = x; maxY = y;
-				}
-			}
-		}
-		Tile tile = board.tile[maxX][maxY];
-		maxDanger += getMinBenefit(tile);
-	}
-	printf("benefit : %d\n",maxDanger);
 	score -= maxDanger;
+	if(maxDanger == 0){
+		printf("profit : %d\n",profits);
+		score -= profits;
+	}
 	return score;
 }
 int placePenalty(Move move){ // Placement gives false additional score from number of pieces,
