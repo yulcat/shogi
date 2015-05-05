@@ -89,7 +89,7 @@ int getProfit(Tile tile){
 		// If target is not enemy, or there is no mine nearby, Profit is 0.
 	int enemyLoss = typeToScore(tile.occupied);
 	if(tile.myNum > tile.enemyNum)
-		return enemyLoss;
+		return -enemyLoss;
 		// If mine is outnumbered, count it profit.
 	int i, minMyLoss = typeToScore(tile.myReach[0]);
 	for(i=0; i<tile.enemyNum; i++){
@@ -97,7 +97,7 @@ int getProfit(Tile tile){
 		if(minMyLoss > myLoss)
 			minMyLoss = myLoss;
 	}
-	return enemyLoss + minMyLoss;
+	return -(enemyLoss + minMyLoss);
 	// If enemy can retake the tile, calculate profit and loss.
 }
 int getScore(Board board){
@@ -112,15 +112,17 @@ int getScore(Board board){
 			if(danger > maxDanger)
 				maxDanger = danger;
 			int profit = getProfit(tile);
-			if(profit<0)
+			if(profit>0)
 				profits += getProfit(tile);
+			// Get dangers and profits
 		}
 	}
 	printf("sum : %d\ndanger : %d\n", score, maxDanger);
 	score -= maxDanger;
 	if(maxDanger == 0){
+		// Add profits only when there is no danger.
 		printf("profit : %d\n",profits);
-		score -= profits;
+		score += profits;
 	}
 	return score;
 }
