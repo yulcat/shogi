@@ -8,7 +8,7 @@ int rate(Group animalsOnBoard, Move move){ // Score a Move
 		applyReach(animalsOnBoard.animal[i], &board);
 		// apply list of animals that can reach the tile
 	}
-	int score = getScore(board) - placePenalty(move) + effectRange(board);
+	int score = getScore(board) - placePenalty(move) + effectRange(board) + catchLion(board);
 	// Score is board score + place penalty + moveable range
 	return score;
 }
@@ -63,6 +63,16 @@ Board makeBoard(Group* group, Move move){ // Make Board from Group and Move
 		// Apply Movement
 	}
 	return board;
+}
+int catchLion(Board board){ // If catched lion, plus 100000 points
+	int x,y,lion=0;
+	for(x=0; x<3; x++){
+		for(y=0; y<4; y++){
+			if(board.tile[x][y].type == 'l')
+				return 0;
+		}
+	}
+	return 100000;
 }
 int getDanger(Tile tile){
 	char target = tile.occupied;
