@@ -68,7 +68,7 @@ int catchLion(Board board){ // If catched lion, plus 100000 points
 	int x,y,lion=0;
 	for(x=0; x<3; x++){
 		for(y=0; y<4; y++){
-			if(board.tile[x][y].type == 'l')
+			if(board.tile[x][y].occupied == 'l')
 				return 0;
 		}
 	}
