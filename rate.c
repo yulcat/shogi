@@ -89,6 +89,7 @@ int touchDown(Board board){ // did my/enemy lion get touchdown?
 			// If enemy lion can get touchdown, give penalty points
 		}
 	}
+	return 0;
 }
 int getDanger(Tile tile){
 	char target = tile.occupied;
