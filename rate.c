@@ -8,8 +8,13 @@ int rate(Group animalsOnBoard, Move move){ // Score a Move
 		applyReach(animalsOnBoard.animal[i], &board);
 		// apply list of animals that can reach the tile
 	}
-	int score = getScore(board) - placePenalty(move) + effectRange(board) + catchLion(board) + touchDown(board);
-	// Score is board score + place penalty + moveable range + did we catched lion? + did lion get touchdown?
+	int score = getScore(board) 
+				- placePenalty(move) 
+				+ effectRange(board) 
+				+ catchLion(board) 
+				+ touchDown(board);
+	// Score is (board score) + (placement penalty)
+	// + (moveable range) + (did we catched lion?) + (did lion get touchdown?)
 	return score;
 }
 
@@ -91,7 +96,7 @@ int touchDown(Board board){ // did my/enemy lion get touchdown?
 	}
 	return 0;
 }
-int getDanger(Tile tile){
+int getDanger(Tile tile){ // Get danger from cost comparing
 	char target = tile.occupied;
 	if(isMine(target)==0 || tile.enemyNum == 0)
 		return 0;
@@ -109,7 +114,7 @@ int getDanger(Tile tile){
 	return myLoss + minEnemyLoss;
 	// If we can retake the tile, calculate profit and loss.
 }
-int getProfit(Tile tile){
+int getProfit(Tile tile){ // Get profit from cost comparing
 	char target = tile.occupied;
 	if(isEnemy(target)==0 || tile.myNum == 0)
 		return 0;
@@ -127,7 +132,7 @@ int getProfit(Tile tile){
 	return -(enemyLoss + minMyLoss);
 	// If enemy can retake the tile, calculate profit and loss.
 }
-int getScore(Board board){
+int getScore(Board board){ // Sum of pieces on the board, with danger and profit
 	int maxDanger=0, profits=0, x, y, score=0;
 	for(x=0; x<3; x++){
 		for(y=0; y<4; y++){
@@ -136,6 +141,7 @@ int getScore(Board board){
 			int targetScore = typeToScore(target);
 			int danger = getDanger(tile);
 			score += targetScore;
+			// Score from number of pieces
 			if(danger > maxDanger)
 				maxDanger = danger;
 			int profit = getProfit(tile);
@@ -149,7 +155,8 @@ int getScore(Board board){
 	if(maxDanger == 0){
 		// Add profits only when there is no danger.
 		printf("profit : %d\n",profits);
-		score += profits;
+		score += profits/2;
+		// expected profit is evaluated half of the real one.
 	}
 	return score;
 }
@@ -176,6 +183,7 @@ int effectRange(Board board){ // Getting various moves is strategic benefit.
 	return effect;
 }
 void applyEnemy(char type, int prevX, int prevY, int dirc, Board* board){
+	// Apply enemy range to tile in the direction.
 	int x = moveX(prevX,dirc),
 		y = moveY(prevY,dirc);
 	if(isInBoard(x,y)==0)
@@ -184,6 +192,7 @@ void applyEnemy(char type, int prevX, int prevY, int dirc, Board* board){
 	board->tile[x][y].enemyNum++;
 }
 void applyMy(char type, int prevX, int prevY, int dirc, Board* board){
+	// Apply my range to tile in the direction.
 	int x = moveX(prevX,dirc),
 		y = moveY(prevY,dirc);
 	if(isInBoard(x,y)==0)
@@ -192,6 +201,7 @@ void applyMy(char type, int prevX, int prevY, int dirc, Board* board){
 	board->tile[x][y].myNum++;
 }
 void applyReach(Animal anim, Board* board){
+	// Apply moveable range to each tiles from animal piece.
 	switch(anim.type){
 	case 'L':
 		applyMy('L', anim.x, anim.y, 1, board);
@@ -263,7 +273,7 @@ void applyReach(Animal anim, Board* board){
 		return;
 	}
 }
-int typeToScore(char type){
+int typeToScore(char type){ // Animal type to score
 	switch(type){
 	case 'L':
 		return 20000;

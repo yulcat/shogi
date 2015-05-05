@@ -1,5 +1,21 @@
 #include "move.h"
 
+Movelist getMovelist(Group onBoard, Group myHand){ // Get all the possible moves
+	Movelist movelist;
+	movelist.num = 0;
+	int i,a,b;
+	for(i=0;i<onBoard.num;i++){
+			animalMove(onBoard.animal[i],onBoard,&movelist);
+	}
+	for(a=0;a<3;a++){
+			for(b=0;b<4;b++){
+					for(i=0;i<myHand.num;i++){
+							addMove(myHand.animal[i].type,a,b,PLACE,onBoard,&movelist);
+					}
+			}
+	}
+	return movelist;
+}
 Animal newAnimal(char type, int x, int y){ // Makes new Animal
 	Animal anim;
 	anim.x = x;
@@ -102,7 +118,8 @@ int testDirc(int x, int y, int dirc, Group onBoard){ // Can it move to the direc
 	else
 		return 0;
 }
-void addMove(char type, int x, int y, int dirc, Group onBoard, Movelist* list){ // Add Move to Movelist when it can
+void addMove(char type, int x, int y, int dirc, Group onBoard, Movelist* list){ 
+	// Add Move to Movelist when it can
 	if(dirc==PLACE){
 		if(getTile(x,y,onBoard)=='o'){
 			list->list[list->num] = newMove(type,x,y,PLACE);
@@ -179,20 +196,4 @@ void printMove(Move move){ // Print Move
 			y = moveY(move.prevY,move.dirc);
 		printf("%c %c%d %c%d\n", move.type, 'A'+move.prevX, move.prevY+1, 'A'+x, y+1);
 	}
-}
-Movelist getMovelist(Group onBoard, Group myHand){ // Get all the moves
-	Movelist movelist;
-	movelist.num = 0;
-	int i,a,b;
-	for(i=0;i<onBoard.num;i++){
-			animalMove(onBoard.animal[i],onBoard,&movelist);
-	}
-	for(a=0;a<3;a++){
-			for(b=0;b<4;b++){
-					for(i=0;i<myHand.num;i++){
-							addMove(myHand.animal[i].type,a,b,PLACE,onBoard,&movelist);
-					}
-			}
-	}
-	return movelist;
 }
