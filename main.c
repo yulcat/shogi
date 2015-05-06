@@ -19,7 +19,10 @@ int main(){
 			// Get the move with highest score
 		}
 	}
-	printMove(movelist.list[maxId]);
+	if(maxScore == 0)
+		printf("give_up\n");
+	else
+		printMove(movelist.list[maxId]);
 	// Print the move with highest score
 	
 	return 0;
