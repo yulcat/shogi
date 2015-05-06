@@ -7,6 +7,18 @@ int rate(Group animalsOnBoard, Move move){ // Score a Move
 	for(i=0; i<animalsOnBoard.num; i++){
 		applyReach(animalsOnBoard.animal[i], &board);
 		// apply list of animals that can reach the tile
+		printf("%c",animalsOnBoard.animal[i].type);
+	}
+	printf("\n");
+	for(y=0;y<4;y++){
+		for(x=0;x<3;x++){
+			printf("%c",board.tile[x][y].occupied);
+		}
+		printf(" ");
+		for(x=0;x<3;x++){
+			printf("%d",board.tile[x][y].myNum);
+		}
+		printf("\n");
 	}
 	int score = getScore(board) 
 				- placePenalty(move) 
@@ -15,6 +27,7 @@ int rate(Group animalsOnBoard, Move move){ // Score a Move
 				+ touchDown(board);
 	// Score is (board score) + (placement penalty)
 	// + (moveable range) + (did we catched lion?) + (did lion get touchdown?)
+	printf("mave range : %d\n",effectRange(board));
 	return score;
 }
 
@@ -36,7 +49,7 @@ Group moveGroup(Group group, int prevX, int prevY, int x, int y){ // apply Move 
 				group.animal[i].type = 'H';
 				// chick to hen
 		}
-		newGroup.animal[i] = group.animal[i];
+		newGroup.animal[newGroup.num] = group.animal[i];
 		newGroup.num++;
 	}
 	return newGroup;
@@ -173,11 +186,13 @@ int effectRange(Board board){ // Getting various moves is strategic benefit.
 	for(x=0;x<3;x++){
 		for(y=0;y<4;y++){
 			Tile tile = board.tile[x][y];
-			for(i=0;i<tile.myNum;i++){
-				if(tile.myReach[i]=='L' || isMine(tile.occupied))
-					continue;
-				effect++;
-			}
+//			for(i=0;i<tile.myNum;i++){
+//				if(tile.myReach[i]=='L' || isMine(tile.occupied))
+//					continue;
+//				effect++;
+//			}
+			if(isMine(tile.occupied)==0)
+				effect += tile.myNum;
 		}
 	}
 	return effect;
