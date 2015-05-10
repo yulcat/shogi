@@ -4,6 +4,14 @@
 #define MAX_MOVE 50
 #define PLACE 5
 #define OUT_OF_BOARD '\0'
+// Move direction by int :
+//
+//   7   8   9
+//     \ | /
+//   4 - L - 6
+//     / | \
+//   1   2   3
+//
 
 typedef struct{
 	int x, y;

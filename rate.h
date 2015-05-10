@@ -10,7 +10,7 @@ typedef struct{
 	char myReach[8];
 	int myNum;
 } Tile;
-// Each tiles has list of animals, that can move to the tile.
+// Each tiles has list of animals which can move to the tile.
 typedef struct{
 	Tile tile[3][4];
 } Board;
