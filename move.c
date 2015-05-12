@@ -1,5 +1,20 @@
 #include "move.h"
 
+const int animalDirections[10][8] = 
+{
+	{8,0,0,0,0,0,0,0},
+	{2,4,6,8,0,0,0,0},
+	{1,3,7,9,0,0,0,0},
+	{1,2,3,4,6,7,8,9},
+	{2,4,6,7,8,9,0,0},
+	{2,0,0,0,0,0,0,0},
+	{2,4,6,8,0,0,0,0},
+	{1,3,7,9,0,0,0,0},
+	{1,2,3,4,6,7,8,9},
+	{1,2,3,4,6,8,0,0}
+};
+const int animalDirectionCount[10] = {1,4,4,8,6,1,4,4,8,6};
+
 Movelist getMovelist(Group onBoard, Group myHand){ // Get all the possible moves
 	Movelist movelist;
 	movelist.num = 0;
@@ -108,6 +123,32 @@ int isEnemy(char target){ // Is it enemy?
 		|| target == 'h')
 		return 1;
 	else return 0;
+}
+int charToAnimalnum(char type){
+	switch(type){
+	case 'C':
+		return MY_CHICK;
+	case 'G':
+		return MY_GIRAFFE;
+	case 'E':
+		return MY_ELEPHANT;
+	case 'L':
+		return MY_LION;
+	case 'H':
+		return MY_HEN;
+	case 'c':
+		return ENEMY_CHICK;
+	case 'g':
+		return ENEMY_GIRAFFE;
+	case 'e':
+		return ENEMY_ELEPHANT;
+	case 'l':
+		return ENEMY_LION;
+	case 'h':
+		return ENEMY_HEN;
+	default :
+		return 0;
+	}
 }
 int testDirc(int x, int y, int dirc, Group onBoard){ // Can it move to the direction?
 	x = moveX(x,dirc);

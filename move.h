@@ -44,21 +44,6 @@ typedef struct{
 } Movelist;
 // List of Possible Moves, with size.
 
-const int moveDirections[10][8] = 
-{
-	{8,0,0,0,0,0,0,0},
-	{2,4,6,8,0,0,0,0},
-	{1,3,7,9,0,0,0,0},
-	{1,2,3,4,6,7,8,9},
-	{2,4,6,7,8,9,0,0},
-	{2,0,0,0,0,0,0,0},
-	{2,4,6,8,0,0,0,0},
-	{1,3,7,9,0,0,0,0},
-	{1,2,3,4,6,7,8,9},
-	{1,2,3,4,6,8,0,0}
-};
-const int moveDirectionCount[10] = {1,4,4,8,6,1,4,4,8,6};
-
 Animal newAnimal(char type, int x, int y);
 Move newMove(char type, int prevX, int prevY, int dirc);
 void inputBoard(Group* onBoard, Group* myHand, Group* enemyHand);
@@ -68,6 +53,7 @@ int moveX(int x, int dirc);
 int moveY(int y, int dirc);
 int isMine(char target);
 int isEnemy(char target);
+int charToAnimalnum(char type);
 int testDirc(int x, int y, int dirc, Group onBoard);
 void addMove(char type, int x, int y, int dirc, Group onBoard, Movelist* list);
 void moveGiraffe(int x, int y, Group onBoard, Movelist* list);
