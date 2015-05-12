@@ -233,39 +233,22 @@ void applyReach(Animal anim, Board* board){
 	// Apply moveable range to each tiles from animal piece.
 	int i, type = charToAnimalnum(anim.type);
 	for(i=0; i<animalDirectionCount[type]; i++){
-		applyMy(
-			anim.type, 
-			anim.x, 
-			anim.y, 
-			animalDirections[type][i], 
-			board);
+		if(isMine(anim.type))
+			applyMy(
+				anim.type, 
+				anim.x, 
+				anim.y, 
+				animalDirections[type][i], 
+				board);
+		else
+			applyEnemy(
+				anim.type, 
+				anim.x, 
+				anim.y, 
+				animalDirections[type][i], 
+				board);
 	}
 }
 int typeToScore(char type){ // Animal type to score
-//	return animalScores[charToAnimalnum(type)];
-//}
-	switch(type){
-	case 'L':
-		return 20000;
-	case 'G':
-		return 100;
-	case 'E':
-		return 100;
-	case 'C':
-		return 50;
-	case 'H':
-		return 200;
-	case 'l':
-		return -10000;
-	case 'g':
-		return -100;
-	case 'e':
-		return -100;
-	case 'c':
-		return -50;
-	case 'h':
-		return -200;
-	default:
-		return 0;
-	}
+	return animalScores[charToAnimalnum(type)];
 }
