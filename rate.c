@@ -1,5 +1,19 @@
 #include "rate.h"
 
+const int animalScores[10] =
+{
+	50,
+	100,
+	100,
+	20000,
+	200,
+	-50,
+	-100,
+	-100,
+	-10000,
+	-200
+};
+
 int rate(Group animalsOnBoard, Move move){ // Score a Move
 	Board board = makeBoard(&animalsOnBoard,move);
 	// Get Tile info from Group and Move
@@ -228,6 +242,8 @@ void applyReach(Animal anim, Board* board){
 	}
 }
 int typeToScore(char type){ // Animal type to score
+//	return animalScores[charToAnimalnum(type)];
+//}
 	switch(type){
 	case 'L':
 		return 20000;
