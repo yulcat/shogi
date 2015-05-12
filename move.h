@@ -4,6 +4,16 @@
 #define MAX_MOVE 50
 #define PLACE 5
 #define OUT_OF_BOARD '\0'
+#define MY_CHICK 0
+#define MY_GIRAFFE 1
+#define MY_ELEPHANT 2
+#define MY_LION 3
+#define MY_HEN 4
+#define ENEMY_CHICK 5
+#define ENEMY_GIRAFFE 6
+#define ENEMY_ELEPHANT 7
+#define ENEMY_LION 8
+#define ENEMY_HEN 9
 // Move direction by int :
 //
 //   7   8   9
@@ -33,6 +43,21 @@ typedef struct{
 	int num;
 } Movelist;
 // List of Possible Moves, with size.
+
+const int moveDirections[10][8] = 
+{
+	{8,0,0,0,0,0,0,0},
+	{2,4,6,8,0,0,0,0},
+	{1,3,7,9,0,0,0,0},
+	{1,2,3,4,6,7,8,9},
+	{2,4,6,7,8,9,0,0},
+	{2,0,0,0,0,0,0,0},
+	{2,4,6,8,0,0,0,0},
+	{1,3,7,9,0,0,0,0},
+	{1,2,3,4,6,7,8,9},
+	{1,2,3,4,6,8,0,0}
+};
+const int moveDirectionCount[10] = {1,4,4,8,6,1,4,4,8,6};
 
 Animal newAnimal(char type, int x, int y);
 Move newMove(char type, int prevX, int prevY, int dirc);
