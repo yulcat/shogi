@@ -44,6 +44,8 @@ typedef struct{
 } Movelist;
 // List of Possible Moves, with size.
 
+extern const int animalDirections[10][8];
+extern const int animalDirectionCount[10];
 Animal newAnimal(char type, int x, int y);
 Move newMove(char type, int prevX, int prevY, int dirc);
 void inputBoard(Group* onBoard, Group* myHand, Group* enemyHand);

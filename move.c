@@ -175,6 +175,19 @@ void addMove(char type, int x, int y, int dirc, Group onBoard, Movelist* list){
 			return;
 	}
 }
+void animalMove(Animal anim, Group onBoard, Movelist* list){
+	int i, type = charToAnimalnum(anim.type);
+	if(isMine(anim.type)==0)
+		return;
+	for(i=0; i<animalDirectionCount[type]; i++){
+		addMove(
+			anim.type,
+			anim.x,
+			anim.y,
+			animalDirections[type][i],
+			onBoard,list);
+	}
+}
 void moveGiraffe(int x, int y, Group onBoard, Movelist* list){
 	addMove('G',x,y,2,onBoard,list);
 	addMove('G',x,y,4,onBoard,list);
@@ -208,27 +221,27 @@ void moveElephant(int x, int y, Group onBoard, Movelist* list){
 	addMove('E',x,y,7,onBoard,list);
 	addMove('E',x,y,9,onBoard,list);
 }
-void animalMove(Animal anim, Group onBoard, Movelist* list){ // add Move by Animal.type
-	switch(anim.type){
-	case 'G':
-		moveGiraffe(anim.x,anim.y,onBoard,list);
-		return;
-	case 'C':
-		moveChick(anim.x,anim.y,onBoard,list);
-		return;
-	case 'H':
-		moveHen(anim.x,anim.y,onBoard,list);
-		return;
-	case 'L':
-		moveLion(anim.x,anim.y,onBoard,list);
-		return;
-	case 'E':
-		moveElephant(anim.x,anim.y,onBoard,list);
-		return;
-	default :
-		return;
-	}
-}
+//void animalMove(Animal anim, Group onBoard, Movelist* list){ // add Move by Animal.type
+//	switch(anim.type){
+//	case 'G':
+//		moveGiraffe(anim.x,anim.y,onBoard,list);
+//		return;
+//	case 'C':
+//		moveChick(anim.x,anim.y,onBoard,list);
+//		return;
+//	case 'H':
+//		moveHen(anim.x,anim.y,onBoard,list);
+//		return;
+//	case 'L':
+//		moveLion(anim.x,anim.y,onBoard,list);
+//		return;
+//	case 'E':
+//		moveElephant(anim.x,anim.y,onBoard,list);
+//		return;
+//	default :
+//		return;
+//	}
+//}
 void printMove(Move move){ // Print Move
 	if(move.dirc == PLACE)
 		printf("%c %c %c%d\n", move.type, 'P', 'A'+move.prevX, move.prevY+1);
