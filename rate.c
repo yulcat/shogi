@@ -250,5 +250,8 @@ void applyReach(Animal anim, Board* board){
 	}
 }
 int typeToScore(char type){ // Animal type to score
-	return animalScores[charToAnimalnum(type)];
+	if(isMine(type)==0 && isEnemy(type)==0)
+		return 0;
+	else
+		return animalScores[charToAnimalnum(type)];
 }
