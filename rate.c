@@ -21,19 +21,7 @@ int rate(Group animalsOnBoard, Move move){ // Score a Move
 	for(i=0; i<animalsOnBoard.num; i++){
 		applyReach(animalsOnBoard.animal[i], &board);
 		// apply list of animals that can reach the tile
-//		printf("%c",animalsOnBoard.animal[i].type);
 	}
-//	printf("\n");
-//	for(y=0;y<4;y++){
-//		for(x=0;x<3;x++){
-//			printf("%c",board.tile[x][y].occupied);
-//		}
-//		printf(" ");
-//		for(x=0;x<3;x++){
-//			printf("%d",board.tile[x][y].myNum);
-//		}
-//		printf("\n");
-//	}
 	int score = getScore(board) 
 				- placePenalty(move) 
 				+ effectRange(board) 
@@ -41,7 +29,6 @@ int rate(Group animalsOnBoard, Move move){ // Score a Move
 				+ touchDown(board);
 	// Score is (board score) + (placement penalty)
 	// + (moveable range) + (did we catched lion?) + (did lion get touchdown?)
-//	printf("mave range : %d\n",effectRange(board));
 	return score;
 }
 
@@ -177,11 +164,9 @@ int getScore(Board board){ // Sum of pieces on the board, with danger and profit
 			// Get dangers and profits
 		}
 	}
-//	printf("sum : %d\ndanger : %d\n", score, maxDanger);
 	score -= maxDanger;
 	if(maxDanger == 0){
 		// Add profits only when there is no danger.
-//		printf("profit : %d\n",profits);
 		score += profits/2;
 		// expected profit is evaluated half of the real one.
 	}
@@ -200,11 +185,6 @@ int effectRange(Board board){ // Getting various moves is strategic benefit.
 	for(x=0;x<3;x++){
 		for(y=0;y<4;y++){
 			Tile tile = board.tile[x][y];
-//			for(i=0;i<tile.myNum;i++){
-//				if(tile.myReach[i]=='L' || isMine(tile.occupied))
-//					continue;
-//				effect++;
-//			}
 			if(isMine(tile.occupied)==0)
 				effect += tile.myNum;
 		}
