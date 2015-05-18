@@ -1,4 +1,4 @@
-TARGET =    	shogi
+TARGET =    	run
 OBJS = main.o rate.o move.o
 SRCS = $(OBJS:.o=.c)
 CC =    	-c
