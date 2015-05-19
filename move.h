@@ -1,7 +1,7 @@
 #include <stdio.h>
 #define MOVE
 #define MAX_ANIMALS 8
-#define MAX_MOVE 50
+#define MAX_MOVE 100
 #define PLACE 5
 #define OUT_OF_BOARD '\0'
 #define MY_CHICK 0

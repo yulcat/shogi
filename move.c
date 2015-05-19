@@ -2,16 +2,16 @@
 
 const int animalDirections[10][8] = 
 {
-	{8,0,0,0,0,0,0,0},
-	{2,4,6,8,0,0,0,0},
-	{1,3,7,9,0,0,0,0},
-	{1,2,3,4,6,7,8,9},
-	{2,4,6,7,8,9,0,0},
-	{2,0,0,0,0,0,0,0},
-	{2,4,6,8,0,0,0,0},
-	{1,3,7,9,0,0,0,0},
-	{1,2,3,4,6,7,8,9},
-	{1,2,3,4,6,8,0,0}
+	{8,0,0,0,0,0,0,0},// My Chick
+	{2,4,6,8,0,0,0,0},// My Giraffe
+	{1,3,7,9,0,0,0,0},// My Elephant
+	{1,2,3,4,6,7,8,9},// My Lion
+	{2,4,6,7,8,9,0,0},// My Hen
+	{2,0,0,0,0,0,0,0},// Enemy Chick
+	{2,4,6,8,0,0,0,0},// Enemy Giraffe
+	{1,3,7,9,0,0,0,0},// Enemy Elephant
+	{1,2,3,4,6,7,8,9},// Enemy Lion
+	{1,2,3,4,6,8,0,0} // Enemy Hen
 };
 const int animalDirectionCount[10] = {1,4,4,8,6,1,4,4,8,6};
 
@@ -46,7 +46,8 @@ Move newMove(char type, int prevX, int prevY, int dirc){ // Makes new Move
 	move.dirc = dirc;
 	return move;
 }
-void inputBoard(Group* onBoard, Group* myHand, Group* enemyHand){ // Takes stdin to build Groups
+void inputBoard(Group* onBoard, Group* myHand, Group* enemyHand){ 
+	// Takes stdin to build Groups
 	int i,j;
 	char buff[MAX_ANIMALS];
 	onBoard->num = 0;
@@ -176,6 +177,7 @@ void addMove(char type, int x, int y, int dirc, Group onBoard, Movelist* list){
 	}
 }
 void animalMove(Animal anim, Group onBoard, Movelist* list){
+	// Call addMove to each directions by animal type
 	int i, type = charToAnimalnum(anim.type);
 	if(isMine(anim.type)==0)
 		return;
