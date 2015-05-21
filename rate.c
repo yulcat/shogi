@@ -22,11 +22,12 @@ int rate(Group animalsOnBoard, Move move){ // Score a Move
 		applyReach(animalsOnBoard.animal[i], &board);
 		// apply list of animals that can reach the tile
 	}
-	int score = getScore(board) 
-				- placePenalty(move) 
-				+ effectRange(board) 
-				+ catchLion(board) 
-				+ touchDown(board);
+	int score = 
+		getScore(board) 
+		- placePenalty(move) 
+		+ effectRange(board) 
+		+ catchLion(board) 
+		+ touchDown(board);
 	// Score is (board score) + (placement penalty)
 	// + (moveable range) + (did we catched lion?) + (did lion get touchdown?)
 	return score;
