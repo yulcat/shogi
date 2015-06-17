@@ -17,7 +17,7 @@ const int animalScores[10] =
 int rate(Group animalsOnBoard, Move move, Group enemyHand){ // Score a Move
 	Board board = makeBoard(&animalsOnBoard,move);
 	// Get Tile info from Group and Move
-	int i, x, y;
+	int i;
 	for(i=0; i<animalsOnBoard.num; i++){
 		applyReach(animalsOnBoard.animal[i], &board);
 		// apply list of animals that can reach the tile
@@ -31,6 +31,14 @@ int rate(Group animalsOnBoard, Move move, Group enemyHand){ // Score a Move
 	score += lionPosition(animalsOnBoard);
 	// Score is (board score) + (placement penalty)
 	// + (moveable range) + (did we catched lion?) + (did lion get touchdown?)
+	int x,y;
+	for(y=0; y<4; y++){
+		for(x=0; x<3; x++){
+			printf("%c",board.tile[x][y].occupied);
+		}
+		printf("\n");
+	}
+	printf("place : %d\nlion : %d\ntotal : %d\n",placeDanger(board,enemyHand),lionPosition(animalsOnBoard),score);
 	return score;
 }
 
@@ -129,7 +137,7 @@ int placeDanger(Board board, Group enemyHand){
 	if(danger == 0)
 		return 0;
 	else
-		return -25;
+		return -danger;
 }
 int getPlaceDanger(Board board, Animal enemy){
 	int i;
@@ -138,13 +146,13 @@ int getPlaceDanger(Board board, Animal enemy){
 		int dirc = animalDirections[type][i];
 		int x = moveX(enemy.x, dirc);
 		int y = moveY(enemy.y, dirc);
-		if(x>3 || x<0 || y>4 || y<0)
+		if(x>=3 || x<0 || y>=4 || y<0)
 			continue;
 		char myType = charToAnimalnum(board.tile[x][y].occupied);
 		if(!isMine(myType))
 			continue;
 		if(!animalCanFlee(board, x, y, myType))
-			return 1;
+			return typeToScore(board.tile[x][y].occupied)/2;
 	}
 	return 0;
 }
@@ -243,7 +251,7 @@ int placePenalty(Move move){ // Placement gives false additional score from numb
 }
 int effectRange(Board board){ // Getting various moves is strategic benefit.
 							  // Give additional score for each possible moves.
-	int x,y,i,effect = 0;
+	int x,y,effect = 0;
 	for(x=0;x<3;x++){
 		for(y=0;y<4;y++){
 			Tile tile = board.tile[x][y];

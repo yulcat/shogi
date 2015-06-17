@@ -3,10 +3,10 @@ OBJS = main.o rate.o move.o
 SRCS = $(OBJS:.o=.c)
 CC =    	-c
 $(TARGET): $(OBJS)
-		gcc -lm -o $@ $^
+		gcc -Wall -lm -o $@ $^
 
 .c.o:
-		gcc $(CC) $<
+		gcc -Wall $(CC) $<
 
 dep : 
 		gccmakedep $(SRCS)
