@@ -113,9 +113,58 @@ int touchDown(Board board){ // did my/enemy lion get touchdown?
 	return 0;
 }
 int placeDanger(Board board, Group enemyHand){
+	int x,y,i,danger = 0;
+	for(x=0; x<3; x++){
+		for(y=0; y<4; y++){
+			if(board.tile[x][y].occupied != 'o')
+				continue;
+			if(board.tile[x][y].enemyNum < board.tile[x][y].myNum)
+				continue;
+			for(i=0; i<enemyHand.num; i++){
+				Animal enemy = newAnimal(x,y,enemyHand.animal[i].type);
+				danger += getPlaceDanger(board,enemy);
+			}
+		}
+	}
+	if(danger == 0)
+		return 0;
+	else
+		return -25;
+}
+int getPlaceDanger(Board board, Animal enemy){
+	int i;
+	int type = charToAnimalnum(enemy.type);
+	for(i=0; i<animalDirectionCount[type]; i++){
+		int dirc = animalDirections[type][i];
+		int x = moveX(enemy.x, dirc);
+		int y = moveY(enemy.y, dirc);
+		if(x>3 || x<0 || y>4 || y<0)
+			continue;
+		char myType = charToAnimalnum(board.tile[x][y].occupied);
+		if(!isMine(myType))
+			continue;
+		if(!animalCanFlee(board, x, y, myType))
+			return 1;
+	}
 	return 0;
 }
+int animalCanFlee(Board board, int x, int y, int type){
+	int i, tileToFlee = 0;
+	for(i=0; i<animalDirectionCount[type]; i++){
+		int dirc = animalDirections[type][i];
+		int myX = moveX(x, dirc);
+		int myY = moveY(y, dirc);
+		if(myX>3 || myX<0 || myY>4 || myY<0)
+			continue;
+		if(board.tile[myX][myY].occupied == 'o')
+			tileToFlee = 1;
+		if(isEnemy(board.tile[myX][myY].occupied) && board.tile[myX][myY].myNum == 1)
+			return 0;
+	}
+	return tileToFlee;
+}
 int lionPosition(Group animalsOnBoard){
+	// Lion position bonus
 	int i;
 	for(i=0; i<animalsOnBoard.num; i++){
 		if(animalsOnBoard.animal[i].type == 'L')

@@ -28,6 +28,8 @@ int getScore(Board board);
 int placePenalty(Move move);
 int effectRange(Board board);
 int placeDanger(Board board, Group enemyHand);
+int getPlaceDanger(Board board, Animal enemy);
+int animalCanFlee(Board board, int x, int y, int type);
 int lionPosition(Group animalsOnBoard);
 void applyEnemy(char type, int prevX, int prevY, int dirc, Board* board);
 void applyMy(char type, int prevX, int prevY, int dirc, Board* board);
