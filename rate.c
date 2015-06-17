@@ -14,7 +14,7 @@ const int animalScores[10] =
 	-200
 };
 
-int rate(Group animalsOnBoard, Move move){ // Score a Move
+int rate(Group animalsOnBoard, Move move, Group enemyHand){ // Score a Move
 	Board board = makeBoard(&animalsOnBoard,move);
 	// Get Tile info from Group and Move
 	int i, x, y;
@@ -27,6 +27,8 @@ int rate(Group animalsOnBoard, Move move){ // Score a Move
 	score += effectRange(board);
 	score += catchLion(board);
 	score += touchDown(board);
+	score += placeDanger(board,enemyHand);
+	score += lionPosition(animalsOnBoard);
 	// Score is (board score) + (placement penalty)
 	// + (moveable range) + (did we catched lion?) + (did lion get touchdown?)
 	return score;
@@ -107,6 +109,17 @@ int touchDown(Board board){ // did my/enemy lion get touchdown?
 				return -5000;
 			// If enemy lion can get touchdown, give penalty points
 		}
+	}
+	return 0;
+}
+int placeDanger(Board board, Group enemyHand){
+	return 0;
+}
+int lionPosition(Group animalsOnBoard){
+	int i;
+	for(i=0; i<animalsOnBoard.num; i++){
+		if(animalsOnBoard.animal[i].type == 'L')
+			return (3-animalsOnBoard.animal[i].y)*3;
 	}
 	return 0;
 }

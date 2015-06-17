@@ -10,7 +10,7 @@ int main(){
 	int i, maxScore=0, maxId;
 	for(i=0;i<movelist.num;i++){
 		//printMove(movelist.list[i]);
-		int score = rate(onBoard, movelist.list[i]);
+		int score = rate(onBoard, movelist.list[i], enemyHand);
 		// Score each moves
 		//printf("%d\n",score);
 		if(score>maxScore){

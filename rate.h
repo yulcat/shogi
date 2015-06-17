@@ -16,7 +16,7 @@ typedef struct{
 } Board;
 // Array of tiles. fixed size.
 
-int rate(Group onBoard, Move move);
+int rate(Group onBoard, Move move, Group enemyHand);
 Group moveGroup(Group group, int prevX, int prevY, int x, int y);
 Board makeBoard(Group* group, Move move);
 void applyReach(Animal animal, Board* board);
@@ -27,6 +27,8 @@ int getProfit(Tile tile);
 int getScore(Board board);
 int placePenalty(Move move);
 int effectRange(Board board);
+int placeDanger(Board board, Group enemyHand);
+int lionPosition(Group animalsOnBoard);
 void applyEnemy(char type, int prevX, int prevY, int dirc, Board* board);
 void applyMy(char type, int prevX, int prevY, int dirc, Board* board);
 void applyReach(Animal anim, Board* board);
